@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debezium-connector
+spec:
+  selector:
+    matchLabels:
+      app: debezium-connector
+  template:
+    metadata:
+      labels:
+        app: debezium-connector
+    spec:
+      containers:
+      - name: debezium-connector
+        image: debezium-custom:latest
+        imagePullPolicy: IfNotPresent
+        env: 
+          - name: GROUP_ID
+            value: "1"
+          - name: CONFIG_STORAGE_TOPIC
+            value: "connect-config"
+          - name: OFFSET_STORAGE_TOPIC
+            value: "connect-offsets"
+          - name: STATUS_STORAGE_TOPIC
+            value: "connect-status"
+          - name: BOOTSTRAP_SERVERS
+            value: kafka-broker-0.kafka-broker-headless.default.svc.cluster.local:9092,kafka-broker-1.kafka-broker-headless.default.svc.cluster.local:9092,kafka-broker-2.kafka-broker-headless.default.svc.cluster.local:9092
+          - name: LOGGING_LEVEL
+            value: "DEBUG"
+          - name: CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE
+            value: avro
+          - name: KEY_CONVERTER
+            value: io.confluent.connect.avro.AvroConverter
+          - name: VALUE_CONVERTER
+            value: io.confluent.connect.avro.AvroConverter
+          - name: CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL
+            value: http://schema-registry.default.svc.cluster.local:8081
+          - name: CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL
+            value: http://schema-registry.default.svc.cluster.local:8081
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+        ports:
+        - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: debezium-service
+spec:
+  type: NodePort
+  selector:
+    app: debezium-connector
+  ports:
+  - port: 8083  
+    targetPort: 8083
+    nodePort: 30001
+
+
+      
