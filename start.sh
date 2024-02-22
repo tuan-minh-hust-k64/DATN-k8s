@@ -1,4 +1,4 @@
-curl --location --request POST 'localhost:30001/connectors' \
+curl --location --request POST 'http://localhost:8083/connectors' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "name": "order-payment-connector",
@@ -21,7 +21,7 @@ curl --location --request POST 'localhost:30001/connectors' \
       }
  }'
 
-curl --location --request POST 'localhost:30001/connectors' \
+curl --location --request POST 'http://localhost:8083/connectors' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "name": "order-restaurant-connector",
@@ -44,7 +44,7 @@ curl --location --request POST 'localhost:30001/connectors' \
       }
  }'
 
-curl --location --request POST 'localhost:30001/connectors' \
+curl --location --request POST 'http://localhost:8083/connectors' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "name": "payment-order-connector",
@@ -67,7 +67,7 @@ curl --location --request POST 'localhost:30001/connectors' \
       }
  }'
 
-curl --location --request POST 'localhost:30001/connectors' \
+curl --location --request POST 'http://localhost:8083/connectors' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "name": "restaurant-order-connector",
